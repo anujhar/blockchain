@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from .models import Book
 from .serializers import BookSerializer,UserSerializer
+from .permissions import IsOwnerOrReadOnly
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from rest_framework import viewsets
@@ -39,7 +40,7 @@ class BookListViewSet(viewsets.ViewSet):
 
 
 class BookDetailViewSet(viewsets.ViewSet):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
     def retrieve(self, request, pk, format=None):
         queryset = Book.objects.all()
         book = get_object_or_404(queryset,pk=pk)
